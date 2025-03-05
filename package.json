@@ -1,0 +1,41 @@
+{
+  "name": "@protorians/animetric",
+  "version": "0.0.0",
+  "description": "Create your web user interfaces with widgets",
+  "main": "./~esm/index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "tsc --watch -p esm.tsconfig.json",
+    "build": "rm -rf ~esm ~cjs && npm run build:esm && npm run build:cjs",
+    "build:esm": "tsc -p esm.tsconfig.json && ts-add-js-extension --dir=~esm",
+    "build:cjs": "tsc -p cjs.tsconfig.json && ts-add-js-extension --dir=~cjs",
+    "fix:esm": "ts-add-js-extension --dir=~esm",
+    "fix:cjs": "ts-add-js-extension --dir=~cjs"
+  },
+  "exports": {
+    ".": {
+      "require": "./~cjs/index.js",
+      "import": "./~esm/index.js"
+    }
+  },
+  "keywords": [
+    "protorians",
+    "widget",
+    "library"
+  ],
+  "author": "Y. Yannick GOBOU",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/protorians/widgets.git",
+    "directory": "source"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "@protorians/core": "^0.1.11"
+  }
+}
