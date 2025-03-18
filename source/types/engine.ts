@@ -26,22 +26,59 @@ export type IAnimetricTimeline = {
     [K in keyof CSSStyleDeclaration]: number | string;
 }
 
+/**
+ * Animetric Slim Options
+ */
 export interface IAnimetricSlimOptions extends Partial<IAnimetricBaseOptions>, IAnimetricGroupOptions {
     from?: Partial<IAnimetricTimeline>;
     to: Partial<IAnimetricTimeline>;
 }
 
+
+/**
+ * Animetric Options
+ */
 export interface IAnimetricOptions extends IAnimetricBaseOptions {
     from: number[];
     to: number[];
 }
 
-export interface IAnimetric {
+/**
+ * Animetric Controller
+ */
+export interface IAnimetricController {
+
+    /**
+     * Trigger `playing`
+     */
+    play(): this;
+
+    /**
+     * Set pause
+     */
+    pause(): this;
+
+    /**
+     * Resume
+     */
+    resume(): this;
+
+    /**
+     * Stop
+     */
+    stop(): this;
+}
+
+
+/**
+ * Animetric
+ */
+export interface IAnimetric extends IAnimetricController {
 
     /**
      * Signal Stack
      */
-    signal: ISignalStack<IAnimetricEventMap>
+    signal: ISignalStack<IAnimetricSignalMap>
 
     /**
      * @description `true` to play
@@ -139,44 +176,19 @@ export interface IAnimetric {
     callable(callback: IAnimetricCallable): this;
 
     /**
-     * Trigger `playing`
-     */
-    play(): this;
-
-    /**
      * Trigger next frame
      * @param timestamp
      */
     yield(timestamp: number): this;
 
-    /**
-     * Set pause
-     */
-    pause(): this;
-
-    /**
-     * Resume
-     */
-    resume(): this;
-
-    /**
-     * Stop
-     */
-    stop(): this;
 }
 
-
-export interface IAnimetricGroup {
+/**
+ * Animetric Group
+ */
+export interface IAnimetricGroup extends IAnimetricController{
     readonly timelines: IAnimetric[];
     readonly options?: Partial<IAnimetricBaseOptions> & IAnimetricGroupOptions;
-
-    play(): this;
-
-    pause(): this;
-
-    resume(): this;
-
-    stop(): this;
 
     replay(delay?: number): this;
 
@@ -187,8 +199,10 @@ export interface IAnimetricGroup {
     go(index: number): IAnimetric | undefined;
 }
 
-
-export interface IAnimetricEventMap {
+/**
+ * Animetric Signal Map
+ */
+export interface IAnimetricSignalMap {
     initialize: IAnimetricPayload;
     update: IAnimetricPayload;
     play: IAnimetricPayload;

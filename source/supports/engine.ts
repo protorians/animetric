@@ -3,7 +3,7 @@ import type {
     IAnimetric, IAnimetricBaseOptions,
     IAnimetricCallable,
     IAnimetricEasing,
-    IAnimetricEventMap,
+    IAnimetricSignalMap,
     IAnimetricGroup,
     IAnimetricGroupOptions,
     IAnimetricOptions,
@@ -32,7 +32,7 @@ export class AnimetricEngine implements IAnimetric {
     protected _percent: number = 0;
 
 
-    signal: ISignalStack<IAnimetricEventMap>;
+    signal: ISignalStack<IAnimetricSignalMap>;
 
     get ready(): boolean {
         return this._ready;
@@ -77,7 +77,7 @@ export class AnimetricEngine implements IAnimetric {
 
 
     constructor() {
-        this.signal = new Signal.Stack<IAnimetricEventMap>();
+        this.signal = new Signal.Stack<IAnimetricSignalMap>();
     }
 
     from(...value: number[]): this {
