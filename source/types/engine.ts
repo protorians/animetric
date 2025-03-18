@@ -22,7 +22,7 @@ export interface IAnimetricGroupOptions {
     parallel?: boolean;
 }
 
-export type IAnimetricTimeline = {
+export type IAnimetricSequence = {
     [K in keyof CSSStyleDeclaration]: number | string;
 }
 
@@ -30,8 +30,8 @@ export type IAnimetricTimeline = {
  * Animetric Slim Options
  */
 export interface IAnimetricSlimOptions extends Partial<IAnimetricBaseOptions>, IAnimetricGroupOptions {
-    from?: Partial<IAnimetricTimeline>;
-    to: Partial<IAnimetricTimeline>;
+    from?: Partial<IAnimetricSequence>;
+    to: Partial<IAnimetricSequence>;
 }
 
 

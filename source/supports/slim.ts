@@ -1,5 +1,5 @@
 import {$Ui, deepMerge, extractNumbers, type IUiTarget, parseSequence, snapSequence} from "@protorians/core";
-import type {IAnimetric, IAnimetricSlimOptions, IAnimetricTimeline} from "../types";
+import type {IAnimetric, IAnimetricSlimOptions, IAnimetricSequence} from "../types";
 import {createAnimetric, createAnimetricGroup} from "./engine";
 
 
@@ -26,8 +26,8 @@ export function createSlimSequence<T extends HTMLElement>(
 
 export function createSlimSequences<T extends HTMLElement>(
     target: IUiTarget<T>,
-    from: Partial<IAnimetricTimeline>,
-    to: Partial<IAnimetricTimeline>,
+    from: Partial<IAnimetricSequence>,
+    to: Partial<IAnimetricSequence>,
 ): IAnimetric[] {
     const timelines: IAnimetric[] = [];
     for (const property of Object.keys(to)) {

@@ -1,22 +1,19 @@
 {
   "name": "@protorians/animetric",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Create your web user interfaces with widgets",
   "main": "./~esm/index.js",
   "type": "module",
   "scripts": {
     "dev": "tsc --watch -p esm.tsconfig.json",
-    "build": "rm -rf ~esm ~cjs && npm run build:esm && npm run build:cjs",
+    "build": "rm -rf ~esm ~cjs && npm run build:esm",
     "build:esm": "tsc -p esm.tsconfig.json && ts-add-js-extension --dir=~esm",
     "build:cjs": "tsc -p cjs.tsconfig.json && ts-add-js-extension --dir=~cjs",
     "fix:esm": "ts-add-js-extension --dir=~esm",
     "fix:cjs": "ts-add-js-extension --dir=~cjs"
   },
   "exports": {
-    ".": {
-      "require": "./~cjs/index.js",
-      "import": "./~esm/index.js"
-    }
+    ".": "./~esm/index.js"
   },
   "keywords": [
     "protorians",
