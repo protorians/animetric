@@ -1,9 +1,11 @@
 import {type ISignalStack, Signal} from "@protorians/core";
 import type {
-    IAnimetric,
+    IAnimetric, IAnimetricBaseOptions,
     IAnimetricCallable,
     IAnimetricEasing,
     IAnimetricEventMap,
+    IAnimetricGroup,
+    IAnimetricGroupOptions,
     IAnimetricOptions,
     IAnimetricPayload
 } from "../types";
@@ -112,9 +114,9 @@ export class AnimetricEngine implements IAnimetric {
         return this;
     }
 
-    ease(ease: IAnimetricEasing): this {
+    ease(ease: IAnimetricEasing | undefined): this {
         if (this.status !== null) return this;
-        this._options.ease = ease;
+        if (ease) this._options.ease = ease;
         return this;
     }
 
@@ -226,6 +228,91 @@ export class AnimetricEngine implements IAnimetric {
 
 }
 
+
+export class AnimetricGroup implements IAnimetricGroup {
+
+    protected _index: number | undefined;
+
+    constructor(
+        readonly timelines: IAnimetric[],
+        readonly options?: Partial<IAnimetricBaseOptions> & IAnimetricGroupOptions,
+    ) {
+
+        this.options = options || {} as IAnimetricBaseOptions & IAnimetricGroupOptions;
+        this.timelines = timelines.map(animetric =>
+            animetric
+                .ease(this.options?.ease || undefined)
+                .duration(this.options?.duration || 1000)
+                .infinite(this.options?.infinite || false)
+                .decimal(this.options?.decimal || 3)
+                .delay(this.options?.delay || 0)
+        );
+    }
+
+    play(): this {
+        this._index = undefined;
+
+        if (this.options?.parallel)
+            for (const timeline of this.timelines)
+                timeline.play()
+
+        else if (this.timelines.length) {
+            this._index = 0;
+            for (const timeline of this.timelines) {
+                timeline.signal.listen('complete', () => {
+                    this.next()?.play()
+                })
+            }
+            this.timelines[0].play()
+        }
+
+
+        return this;
+    }
+
+    pause(): this {
+        for (const timeline of this.timelines)
+            timeline.pause();
+        return this;
+    }
+
+    resume(): this {
+        for (const timeline of this.timelines)
+            timeline.resume();
+        return this;
+    }
+
+    stop(): this {
+        for (const timeline of this.timelines)
+            timeline.stop();
+        return this;
+    }
+
+    replay(delay?: number): this {
+        this.stop()
+        if (delay) setTimeout(() => this.play(), delay);
+        else requestAnimationFrame(() => this.play());
+        return this;
+    }
+
+    next(): IAnimetric | undefined {
+        return this.go((this._index || 0) + 1);
+    }
+
+    previous(): IAnimetric | undefined {
+        return this.go((this._index || 0) - 1);
+    }
+
+    go(index: number): IAnimetric | undefined {
+        const timeline = this.timelines[index] || undefined;
+
+        if (!timeline) return undefined;
+        this._index = index;
+        return timeline;
+    }
+
+}
+
 export function createAnimetric(options?: Partial<IAnimetricOptions>) {
     const instance = (new AnimetricEngine());
 
@@ -239,4 +326,8 @@ export function createAnimetric(options?: Partial<IAnimetricOptions>) {
             )
 
     return instance;
+}
+
+export function createAnimetricGroup(timelines: IAnimetric[], options?: Partial<IAnimetricBaseOptions>) {
+    return new AnimetricGroup(timelines, options)
 }

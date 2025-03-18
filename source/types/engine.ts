@@ -10,14 +10,30 @@ export interface IAnimetricPayload {
 
 export type IAnimetricEasing = IEasing
 
-export interface IAnimetricOptions {
+export interface IAnimetricBaseOptions {
     infinite: boolean;
-    from: number[];
-    to: number[];
     duration: number;
     decimal: number;
     delay: number;
     ease: IAnimetricEasing;
+}
+
+export interface IAnimetricGroupOptions {
+    parallel?: boolean;
+}
+
+export type IAnimetricTimeline = {
+    [K in keyof CSSStyleDeclaration]: number | string;
+}
+
+export interface IAnimetricSlimOptions extends Partial<IAnimetricBaseOptions>, IAnimetricGroupOptions {
+    from?: Partial<IAnimetricTimeline>;
+    to: Partial<IAnimetricTimeline>;
+}
+
+export interface IAnimetricOptions extends IAnimetricBaseOptions {
+    from: number[];
+    to: number[];
 }
 
 export interface IAnimetric {
@@ -108,7 +124,7 @@ export interface IAnimetric {
      * Set `ease` : computing easing
      * @param ease
      */
-    ease(ease: IAnimetricEasing): this;
+    ease(ease: IAnimetricEasing | undefined): this;
 
     /**
      * Set `to`
@@ -147,6 +163,28 @@ export interface IAnimetric {
      * Stop
      */
     stop(): this;
+}
+
+
+export interface IAnimetricGroup {
+    readonly timelines: IAnimetric[];
+    readonly options?: Partial<IAnimetricBaseOptions> & IAnimetricGroupOptions;
+
+    play(): this;
+
+    pause(): this;
+
+    resume(): this;
+
+    stop(): this;
+
+    replay(delay?: number): this;
+
+    next(): IAnimetric | undefined;
+
+    previous(): IAnimetric | undefined;
+
+    go(index: number): IAnimetric | undefined;
 }
 
 
