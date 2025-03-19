@@ -11,7 +11,7 @@ export function createSlimSequence<T extends HTMLElement>(
 ): IAnimetric {
     const _from = deepMerge<number>((Array.isArray(from) ? from : [from]).map(extractNumbers));
     const _to = deepMerge<number>((Array.isArray(to) ? to : [to]).map(extractNumbers));
-    const sequence = snapSequence(/\d+(\.\d+)?/g, to.toString());
+    const sequence = snapSequence(/-?\d+(\.\d+)?/g, to.toString());
 
     return createAnimetric()
         .from(..._from)
