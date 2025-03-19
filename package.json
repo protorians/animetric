@@ -33,6 +33,6 @@
     "typescript": "^5.7.2"
   },
   "dependencies": {
-    "@protorians/core": "link:/Users/iancarter/Works/Projects/Protorians/core-next"
+    "@protorians/core": "^0.1.33"
   }
 }
