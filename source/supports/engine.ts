@@ -153,13 +153,15 @@ export class AnimetricEngine implements IAnimetric {
             frames: this._options.ease
                 ? this._options.from.map((value, index) =>
                     round(
-                        computeAnimetricEase(this._percent, this) * (value + (this.options.to[index] - value)),
+                         (value - ((value - this._options.to[index]) * computeAnimetricEase(this._percent, this))),
+                        // computeAnimetricEase(this._percent, this) * (value + (this.options.to[index] - value)),
                         this._options.decimal
                     )
                 )
                 : this.options.from.map((value, index) =>
                     round(
-                        ((value + (this.options.to[index] - value)) * this._percent),
+                        (value - ((value - this._options.to[index]) * this._percent)),
+                        // ((value + (this.options.to[index] - value)) * this._percent),
                         this._options.decimal
                     )
                 ),
